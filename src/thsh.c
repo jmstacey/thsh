@@ -1,7 +1,7 @@
 /*
  ============================================================================
  Name        : thsh.c
- Author      : Jon Stacey
+ Authors     : Collin Kruger, Denton Underwood, John Christensen, Jon Stacey
  Version     :
  Copyright   : Copyright 2009 Jon Stacey. All rights reserved.
  Description : Hello World in C, Ansi-style
