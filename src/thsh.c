@@ -3,13 +3,15 @@
  Name        : thsh.c
  Authors     : Collin Kruger, Denton Underwood, John Christensen, Jon Stacey
  Version     :
- Copyright   : Copyright 2009 Jon Stacey. All rights reserved.
- Description : Hello World in C, Ansi-style
+ Copyright   : Copyright 2009. All rights reserved. See LICENSE.
+ Description : This Shell [thsh] is a simple educational shell created for
+			   Operating Systems Principles class.
  ============================================================================
  */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
 
 extern char **environ;
 
@@ -28,6 +30,9 @@ void printEnVars()
 
 int main(int argc, char *argv[], char *envp[])
 {
+	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
+	signal(SIGINT, SIG_IGN); 		  // Ignore ctrl-c. See http://www.cs.cf.ac.uk/Dave/C/node24.html
+
 /////////////////////////////////////////////////////// - Print Args
 	printf("%s\n", "--This is the total number of args--");
 	printf("%s", "argc | ");
