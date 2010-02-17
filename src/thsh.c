@@ -16,16 +16,18 @@
 #include <signal.h>
 #include <string.h>
 
-// TODO: Determine appropriate buffer size.
+// TODO: Protect from buffer overflows
+
+// TODO: Determine appropriate buffer sizes
 int CHAR_BUFFER = 100; // Character input buffer size
-int MAX_ARGS 	= 10; // Maximum number of arguments
+int MAX_ARGS 	= 100; // Maximum number of arguments
 
 const char *SEPARATOR = " ";
 
-void parse_input(char *input, char **arguments)
+void parse_input(char *input, char *arguments[])
 {
-	char *word = NULL; 			// Word container
-	int  index = 0;	   			// Index counter
+	char *word = NULL; // Word container
+	int  index = 0;	   // Index counter
 
 	word = strtok(input, SEPARATOR);
 	while (word != NULL)
@@ -34,6 +36,11 @@ void parse_input(char *input, char **arguments)
 		word = strtok(NULL, SEPARATOR);
 		index++;
 	}
+	// Strip line break from last argument
+	arguments[index - 1] = strtok(arguments[index -1], "\n");
+
+	// Set the next value to NULL so that we later ignore the rest of the data
+	arguments[index] = NULL;
 }
 
 int main(void)
@@ -42,26 +49,19 @@ int main(void)
 	signal(SIGINT, SIG_IGN); 		  // Ignore ctrl-c. See http://www.cs.cf.ac.uk/Dave/C/node24.html
 
 	char input[CHAR_BUFFER];
-	char *arguments;
+	char *arguments[MAX_ARGS];
 
 	while (1)
 	{
-
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
-		parse_input(input, &arguments);  // Parse the input
+		parse_input(input, arguments);    // Parse the input
 
-		int tmp = count(arguments);
-		int tmp2 = sizeof(arguments);
-
-		for (int i = 0; i < count(arguments); i++)
+		// Perform our operations
+		if (strcmp(arguments[0], "echo") == 0)
 		{
-			printf("result is \"%s\"\n", arguments[i]);
+			printf("The value is: \"%s\"\n", arguments[0]);
+			puts("It worked!");
 		}
-
-		*arguments = NULL;
-		// Get user input
-		// Parse input
-		// Switch statement
 	}
 
 	return EXIT_SUCCESS;
