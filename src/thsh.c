@@ -93,6 +93,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			return EXIT_SUCCESS;
 		}
+		else
+		{
+			printf("%s: command not found", arguments[0]);
+		}
 	}
 
 	return EXIT_SUCCESS;
