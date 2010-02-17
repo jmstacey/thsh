@@ -77,6 +77,10 @@ int main(int argc, char *argv[], char *envp[])
 			printf("The value is: \"%s\"\n", arguments[0]);
 			puts("It worked!");
 		}
+		else if (strcmp(arguments[0], "environ") == 0)
+		{
+			printEnVars();
+		}
 	}
 
 	return EXIT_SUCCESS;
