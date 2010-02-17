@@ -45,7 +45,7 @@ void parse_input(char *input, char *arguments[])
 	arguments[index] = NULL;
 }
 
-void printEnVars()
+void print_environment_variables()
 {
 	char **env = environ;
 	printf("\n");
@@ -87,7 +87,7 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "environ") == 0)
 		{
-			printEnVars();
+			print_environment_variables();
 		}
 		else if (strcmp(arguments[0], "quit") == 0)
 		{
