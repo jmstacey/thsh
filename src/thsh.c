@@ -58,6 +58,15 @@ void printEnVars()
 	}
 }
 
+void echo(char *message[])
+{
+	for (int i = 1; i < MAX_ARGS && message[i] != NULL; i++)
+	{
+		printf("%s ", message[i]);
+	}
+	printf("\n");
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -74,8 +83,7 @@ int main(int argc, char *argv[], char *envp[])
 		// Perform our operations
 		if (strcmp(arguments[0], "echo") == 0)
 		{
-			printf("The value is: \"%s\"\n", arguments[0]);
-			puts("It worked!");
+			echo(arguments);
 		}
 		else if (strcmp(arguments[0], "environ") == 0)
 		{
