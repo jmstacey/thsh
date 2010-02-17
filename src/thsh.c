@@ -81,6 +81,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			printEnVars();
 		}
+		else if (strcmp(arguments[0], "quit") == 0)
+		{
+			return EXIT_SUCCESS;
+		}
 	}
 
 	return EXIT_SUCCESS;
