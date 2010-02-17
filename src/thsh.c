@@ -9,12 +9,14 @@
  ============================================================================
  */
 
-#define count(x) (sizeof (x) / sizeof (*(x)))
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+
+#define count(x) (sizeof (x) / sizeof (*(x)))
+
+extern char **environ;
 
 // TODO: Protect from buffer overflows
 
@@ -42,8 +44,6 @@ void parse_input(char *input, char *arguments[])
 	// Set the next value to NULL so that we later ignore the rest of the data
 	arguments[index] = NULL;
 }
-
-extern char **environ;
 
 void printEnVars()
 {
