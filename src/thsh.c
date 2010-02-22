@@ -93,6 +93,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			return EXIT_SUCCESS;
 		}
+		else if (strcmp(arguments[0], "clr") == 0)
+		{
+			system("clear");
+		}
 		else
 		{
 			printf("%s: command not found", arguments[0]);
