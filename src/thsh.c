@@ -97,6 +97,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			system("clear");
 		}
+		else if (strcmp(arguments[0], "dir") == 0)
+		{
+			system("/bin/dir");
+		}
 		else
 		{
 			printf("%s: command not found", arguments[0]);
