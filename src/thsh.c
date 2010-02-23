@@ -81,6 +81,15 @@ int main(int argc, char *argv[], char *envp[])
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
 		parse_input(input, arguments);    // Parse the input
 
+		// Check if first argument is a batch file and process it if necessary
+		FILE *fp = fopen(arguments[0], "r");
+		if (fp)
+		{
+			// TODO: Handle the batch file
+			// Possibly just read file line by line and execute self with that string of arguments
+			fclose(fp);
+		}
+
 		// Perform our operations
 		if (strcmp(arguments[0], "echo") == 0)
 		{
@@ -105,6 +114,10 @@ int main(int argc, char *argv[], char *envp[])
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
 			chdir(arguments[1]);
+		}
+		else if (strcmp(arguments[0], "sleep") == 0)
+		{
+			system("/bin/sleep");
 		}
 		else
 		{
