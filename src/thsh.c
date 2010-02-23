@@ -68,6 +68,19 @@ void echo(char *message[])
 	printf("\n");
 }
 
+void print_prompt()
+{
+	char cwd[1024];
+	char hostname[1024];
+	char *username;
+
+	username = getenv("USER");
+	getcwd(cwd, sizeof(cwd));
+	gethostname(hostname, sizeof(hostname));
+
+	printf("%s@%s:%s$ ", username, hostname, cwd);
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -78,6 +91,8 @@ int main(int argc, char *argv[], char *envp[])
 
 	while (1)
 	{
+		print_prompt();
+
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
 		parse_input(input, arguments);    // Parse the input
 
