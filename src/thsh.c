@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <unistd.h>
 
 #define count(x) (sizeof (x) / sizeof (*(x)))
 
@@ -100,6 +101,10 @@ int main(int argc, char *argv[], char *envp[])
 		else if (strcmp(arguments[0], "dir") == 0)
 		{
 			system("/bin/dir");
+		}
+		else if (strcmp(arguments[0], "cd") == 0)
+		{
+			chdir(arguments[1]);
 		}
 		else
 		{
