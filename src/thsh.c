@@ -3,7 +3,7 @@
  Name        : thsh.c
  Authors     : Collin Kruger, Denton Underwood, John Christensen, Jon Stacey
  Version     :
- Copyright   : Copyright 2009. All rights reserved. See LICENSE.
+ Copyright   : Copyright 2010. All rights reserved. See LICENSE.
  Description : This Shell [thsh] is a simple educational shell created for
 			   Operating Systems Principles class.
  ============================================================================
