@@ -110,6 +110,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			system("/bin/dir");
 		}
+		else if (strcmp(arguments[0], "sleep") == 0)
+		{
+			system("/bin/sleep");
+		}
 		else
 		{
 			printf("%s: command not found", arguments[0]);
