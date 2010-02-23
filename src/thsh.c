@@ -80,6 +80,14 @@ int main(int argc, char *argv[], char *envp[])
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
 		parse_input(input, arguments);    // Parse the input
 
+		// Check if first argument is a batch file and process it if necessary
+		FILE *fp = fopen(arguments[0], "r");
+		if (fp)
+		{
+			// TODO: Handle the batchfile
+			fclose(fp);
+		}
+
 		// Perform our operations
 		if (strcmp(arguments[0], "echo") == 0)
 		{
