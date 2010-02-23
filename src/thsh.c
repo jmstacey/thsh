@@ -84,7 +84,8 @@ int main(int argc, char *argv[], char *envp[])
 		FILE *fp = fopen(arguments[0], "r");
 		if (fp)
 		{
-			// TODO: Handle the batchfile
+			// TODO: Handle the batch file
+			// Possibly just read file line by line and execute self with that string of arguments
 			fclose(fp);
 		}
 
