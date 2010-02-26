@@ -14,6 +14,8 @@
 #include <signal.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define count(x) (sizeof (x) / sizeof (*(x)))
 
@@ -81,6 +83,26 @@ void print_prompt()
 	printf("%s@%s:%s$ ", username, hostname, cwd);
 }
 
+void run_external_program(char *cmd[])
+{
+	int errno;
+
+	if (fork() == 0)
+	{
+		errno = execvp(cmd[0], cmd);
+		printf("errno is %d\n", errno);
+		if (errno < 0)
+		{
+				printf("%s: command not found\n", cmd[0]);
+				exit(1);
+		}
+	}
+	else
+	{
+		wait(NULL); // Wait for child to finish
+	}
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -142,7 +164,8 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else
 		{
-			printf("%s: command not found", arguments[0]);
+			// Attempt to run existing system command
+			run_external_program(arguments);
 		}
 	}
 
