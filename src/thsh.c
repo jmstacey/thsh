@@ -130,8 +130,8 @@ int main(int argc, char *argv[], char *envp[])
 		// Perform our operations
 		if (arguments[0] == NULL)
 		{
-			// Do nothing
 			// strcmp() will crash and burn if arguments[0] is NULL
+			continue;
 		}
 		else if (strcmp(arguments[0], "echo") == 0)
 		{
