@@ -106,7 +106,12 @@ int main(int argc, char *argv[], char *envp[])
 		}
 
 		// Perform our operations
-		if (strcmp(arguments[0], "echo") == 0)
+		if (arguments[0] == NULL)
+		{
+			// Do nothing
+			// strcmp() will crash and burn if arguments[0] is NULL
+		}
+		else if (strcmp(arguments[0], "echo") == 0)
 		{
 			echo(arguments);
 		}
