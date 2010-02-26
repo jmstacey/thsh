@@ -86,6 +86,19 @@ void print_prompt()
 void run_external_program(char *cmd[])
 {
 	int errno;
+	int background = 0; // Run in background?
+
+	// Ugly ugliness is this
+	int i = 0;
+	while (cmd[i] != NULL)
+	{
+		i++;
+	}
+	if (strcmp(cmd[i - 1], "&") == 0)
+	{
+		cmd[i - 1] = NULL;
+		background = 1;
+	}
 
 	if (fork() == 0)
 	{
@@ -99,7 +112,10 @@ void run_external_program(char *cmd[])
 	}
 	else
 	{
-		wait(NULL); // Wait for child to finish
+		if (!background)
+		{
+			wait(NULL); // Wait for child to finish
+		}
 	}
 }
 
