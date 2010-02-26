@@ -137,7 +137,7 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "pause") == 0)
 		{
-			printf("Shell operaitons have been paused. Press the <enter> key to resume.");
+			printf("Shell operations have been paused. Press the <enter> key to resume.");
 			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
 		}
 		else
