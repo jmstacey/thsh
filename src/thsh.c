@@ -130,9 +130,10 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			chdir(arguments[1]);
 		}
-		else if (strcmp(arguments[0], "sleep") == 0)
+		else if (strcmp(arguments[0], "pause") == 0)
 		{
-			system("/bin/sleep");
+			printf("Shell operaitons have been paused. Press the <enter> key to resume.");
+			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
 		}
 		else
 		{
