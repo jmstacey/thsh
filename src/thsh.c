@@ -155,7 +155,10 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
-			chdir(arguments[1]);
+			if (chdir(arguments[1]) != 0)
+			{
+				printf("cd: %s: %s\n", arguments[1], strerror(errno));
+			}
 		}
 		else if (strcmp(arguments[0], "pause") == 0)
 		{
