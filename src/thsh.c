@@ -11,8 +11,6 @@
 
 #include "thsh.h"
 
-#define count(x) (sizeof (x) / sizeof (*(x)))
-
 extern char **environ;
 
 // TODO: Protect from buffer overflows
