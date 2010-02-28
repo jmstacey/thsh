@@ -11,8 +11,6 @@
 
 #include "thsh.h"
 
-extern char **environ;
-
 // TODO: Protect from buffer overflows
 
 // TODO: Determine appropriate buffer sizes

@@ -30,6 +30,11 @@
 #include <sys/wait.h>
 
 /**
+ * Retrieves external environment.
+ */
+extern char **environ;
+
+/**
  * Parses user input (exploding on " ") and creates an array of arguments.
  *
  * The user input will be exploded on space characters [" "] and added
