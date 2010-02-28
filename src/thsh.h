@@ -117,5 +117,7 @@ void run_external_program(char *cmd[]);
  *   Pointer to the array of character arrays containing the arguments
  * @param char *envp[]
  *   The environment character arrays.
+ * @return int
+ *   Returns exit status code.
  */
 int main(int argc, char *argv[], char *envp[]);
