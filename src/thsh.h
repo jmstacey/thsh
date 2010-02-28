@@ -104,7 +104,6 @@ void print_prompt();
  */
 void run_external_program(char *cmd[]);
 
-
 /**
  * Main program entry point for thsh [this shell].
  *
