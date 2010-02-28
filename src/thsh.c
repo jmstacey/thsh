@@ -13,12 +13,6 @@
 
 // TODO: Protect from buffer overflows
 
-// TODO: Determine appropriate buffer sizes
-int CHAR_BUFFER = 100; // Character input buffer size
-int MAX_ARGS 	= 100; // Maximum number of arguments
-
-const char *SEPARATOR = " ";
-
 void parse_input(char *input, char *arguments[])
 {
 	char *word = NULL; // Word container

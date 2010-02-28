@@ -30,9 +30,14 @@
 #include <sys/wait.h>
 
 /**
- * Retrieves external environment.
+ * Declare constants and globals.
  */
-extern char **environ;
+// TODO: Determine appropriate buffer sizes
+int CHAR_BUFFER = 100; // Character input buffer size
+int MAX_ARGS 	= 100; // Maximum number of arguments
+
+extern char **environ; 		  // Retrieve external environment.
+const  char *SEPARATOR = " "; // Separator used to explode user input.
 
 /**
  * Parses user input (exploding on " ") and creates an array of arguments.
