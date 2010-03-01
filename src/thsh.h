@@ -108,6 +108,13 @@ void print_prompt();
 void run_external_program(char *cmd[]);
 
 /**
+ * Sets the PWD environment variable to the current working directory.
+ *
+ * The current working directory is obtained from the getcwd() system command.
+ */
+void set_pwd()
+
+/**
  * Main program entry point for thsh [this shell].
  *
  * @param int argc

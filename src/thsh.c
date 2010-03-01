@@ -103,6 +103,23 @@ void run_external_program(char *cmd[])
 	}
 }
 
+void set_pwd()
+{
+	long size;
+	char *buf;
+	char *ptr;
+
+	size = pathconf(".", _PC_PATH_MAX);
+
+	if ((buf = (char *)malloc((size_t)size)) != NULL)
+	{
+		ptr = getcwd(buf, (size_t)size);
+	}
+
+	setenv("PWD", buf);
+	free(buf); // getcwd() mallocs buf
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -110,6 +127,8 @@ int main(int argc, char *argv[], char *envp[])
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
+
+	set_pwd(); // Update the current working directory
 
 	while (1)
 	{
@@ -155,9 +174,17 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
-			if (chdir(arguments[1]) != 0)
+			if (arguments[1] == NULL)
+			{
+				printf("%s\n", getenv("PWD"));
+			}
+			else if (chdir(arguments[1]) != 0)
 			{
 				printf("cd: %s: %s\n", arguments[1], strerror(errno));
+			}
+			else
+			{
+				set_pwd();
 			}
 		}
 		else if (strcmp(arguments[0], "pause") == 0)
