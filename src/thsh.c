@@ -86,6 +86,7 @@ void run_external_program(char *cmd[])
 
 	if (fork() == 0)
 	{
+		setenv("PARENT", getenv("SHELL"));
 		errno = execvp(cmd[0], cmd);
 		printf("errno is %d\n", errno);
 		if (errno < 0)
