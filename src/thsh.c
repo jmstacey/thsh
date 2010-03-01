@@ -9,23 +9,9 @@
  ============================================================================
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <string.h>
-#include <unistd.h>
-
-#define count(x) (sizeof (x) / sizeof (*(x)))
-
-extern char **environ;
+#include "thsh.h"
 
 // TODO: Protect from buffer overflows
-
-// TODO: Determine appropriate buffer sizes
-int CHAR_BUFFER = 100; // Character input buffer size
-int MAX_ARGS 	= 100; // Maximum number of arguments
-
-const char *SEPARATOR = " ";
 
 void parse_input(char *input, char *arguments[])
 {
@@ -81,6 +67,60 @@ void print_prompt()
 	printf("%s@%s:%s$ ", username, hostname, cwd);
 }
 
+void run_external_program(char *cmd[])
+{
+	int errno;
+	int background = 0; // Run in background?
+
+	// Ugly ugliness is this
+	int i = 0;
+	while (cmd[i] != NULL)
+	{
+		i++;
+	}
+	if (strcmp(cmd[i - 1], "&") == 0)
+	{
+		cmd[i - 1] = NULL;
+		background = 1;
+	}
+
+	if (fork() == 0)
+	{
+		setenv("PARENT", getenv("SHELL"));
+		errno = execvp(cmd[0], cmd);
+		printf("errno is %d\n", errno);
+		if (errno < 0)
+		{
+				printf("%s: command not found\n", cmd[0]);
+				exit(1);
+		}
+	}
+	else
+	{
+		if (!background)
+		{
+			wait(NULL); // Wait for child to finish
+		}
+	}
+}
+
+void set_pwd()
+{
+	long size;
+	char *buf;
+	char *ptr;
+
+	size = pathconf(".", _PC_PATH_MAX);
+
+	if ((buf = (char *)malloc((size_t)size)) != NULL)
+	{
+		ptr = getcwd(buf, (size_t)size);
+	}
+
+	setenv("PWD", buf);
+	free(buf); // getcwd() mallocs buf
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -88,7 +128,14 @@ int main(int argc, char *argv[], char *envp[])
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
+	char shell_path[BUFSIZ];
 
+	// Initialize shell
+	set_pwd(); // Update the current working directory
+	readlink("/proc/self/exe", shell_path, BUFSIZ);
+	setenv("SHELL", shell_path, 1);
+
+	// Main run loop
 	while (1)
 	{
 		print_prompt();
@@ -106,7 +153,12 @@ int main(int argc, char *argv[], char *envp[])
 		}
 
 		// Perform our operations
-		if (strcmp(arguments[0], "echo") == 0)
+		if (arguments[0] == NULL)
+		{
+			// strcmp() will crash and burn if arguments[0] is NULL
+			continue;
+		}
+		else if (strcmp(arguments[0], "echo") == 0)
 		{
 			echo(arguments);
 		}
@@ -128,15 +180,28 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
-			chdir(arguments[1]);
+			if (arguments[1] == NULL)
+			{
+				printf("%s\n", getenv("PWD"));
+			}
+			else if (chdir(arguments[1]) != 0)
+			{
+				printf("cd: %s: %s\n", arguments[1], strerror(errno));
+			}
+			else
+			{
+				set_pwd();
+			}
 		}
-		else if (strcmp(arguments[0], "sleep") == 0)
+		else if (strcmp(arguments[0], "pause") == 0)
 		{
-			system("/bin/sleep");
+			printf("Shell operations have been paused. Press the <enter> key to resume.");
+			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
 		}
 		else
 		{
-			printf("%s: command not found", arguments[0]);
+			// Attempt to run existing system command
+			run_external_program(arguments);
 		}
 	}
 
