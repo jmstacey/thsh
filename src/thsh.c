@@ -127,9 +127,14 @@ int main(int argc, char *argv[], char *envp[])
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
+	char shell_path[BUFSIZ];
 
+	// Initialize shell
 	set_pwd(); // Update the current working directory
+	readlink("/proc/self/exe", shell_path, BUFSIZ);
+	setenv("SHELL", shell_path, 1);
 
+	// Main run loop
 	while (1)
 	{
 		print_prompt();
