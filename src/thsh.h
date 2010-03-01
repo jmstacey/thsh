@@ -112,7 +112,7 @@ void run_external_program(char *cmd[]);
  *
  * The current working directory is obtained from the getcwd() system command.
  */
-void set_pwd()
+void set_pwd();
 
 /**
  * Main program entry point for thsh [this shell].
