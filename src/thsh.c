@@ -134,6 +134,7 @@ int main(int argc, char *argv[], char *envp[])
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
+	char *batch_script_arguments[MAX_ARGS];
 	char shell_path[BUFSIZ];
 
 	// Initialize shell
@@ -158,7 +159,12 @@ int main(int argc, char *argv[], char *envp[])
 			char line[CHAR_BUFFER];
 			while ( fgets ( line, CHAR_BUFFER, fp ) != NULL ) /* read a line */
 			{
-				printf("%s", line);
+				parse_input(line, batch_script_arguments);
+				if (batch_script_arguments[0] == NULL)
+				{
+					continue;
+				}
+				run_external_program(batch_script_arguments);
 			}
 			fclose(fp);
 		}
