@@ -213,6 +213,14 @@ int main(int argc, char *argv[], char *envp[])
 			printf("Shell operations have been paused. Press the <enter> key to resume.");
 			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
 		}
+		else if (strcmp(arguments[0], "help") == 0)
+		{
+			char more_cmd[CHAR_BUFFER];
+			strcpy(more_cmd, "more ");
+			strcat(more_cmd, getenv("HOME"));
+			strcat(more_cmd, "/README");
+			system(more_cmd);
+		}
 		else
 		{
 			// Attempt to run existing system command
