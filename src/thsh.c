@@ -121,10 +121,16 @@ void set_pwd()
 	free(buf); // getcwd() mallocs buf
 }
 
+void handle_signal(int signo)
+{
+	printf("\n");
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
 	signal(SIGINT, SIG_IGN); 		  // Ignore ctrl-c. See http://www.cs.cf.ac.uk/Dave/C/node24.html
+
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
@@ -138,6 +144,8 @@ int main(int argc, char *argv[], char *envp[])
 	// Main run loop
 	while (1)
 	{
+		signal(SIGINT, handle_signal);
+
 		print_prompt();
 
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
