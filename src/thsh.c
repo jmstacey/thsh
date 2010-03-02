@@ -126,6 +126,63 @@ void handle_signal(int signo)
 	printf("\n");
 }
 
+void override_stdout(char* cmdargs[])
+{
+	int found_stdin  = 0;
+	int found_stdout = 0;
+
+	int i = 0;
+	while(cmdargs[i] != NULL)
+	{
+		if (strcmp(cmdargs[i], "<") == 0)
+		{
+//			if(strcmp(cmdargs[i+2], ">") == 0)
+//			{
+//				// Redirect both input and output
+//				if (freopen(cmdargs[1], "r", stdin) != 0)
+//				{
+//					printf("stdin Redirection Error: %s\n", strerror(errno));
+//					found_stdin = 1;
+//				}
+//				if(freopen(cmdargs[i+1], "a+", stdout) != 0)
+//				{
+//					printf("stdout Redirection Error: %s\n", strerror(errno));
+//				}
+//				break;
+//			}
+			// Redirect input exclusively
+			found_stdin = 1;
+			if (freopen(cmdargs[1], "r", stdin) != 0)
+			{
+				printf("stdin Redirection Error: %s\n", strerror(errno));
+				found_stdin = 0;
+			}
+			break;
+		}
+		else if (strcmp(cmdargs[i], ">") == 0)
+		{
+			// Redirect output exclusively
+			if(freopen(cmdargs[i+1], "a+", stdout) != 0)
+			{
+				printf("stdout Redirection Error: %s\n", strerror(errno));
+			}
+			break;
+		}
+
+		i++;
+	}
+
+	if (found_stdin == 0)
+	{
+		freopen("/dev/tty", "a", stdin);
+	}
+
+	if (found_stdout == 0)
+	{
+		freopen("/dev/tty", "a", stdout);
+	}
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
@@ -151,6 +208,7 @@ int main(int argc, char *argv[], char *envp[])
 
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
 		parse_input(input, arguments);    // Parse the input
+		override_stdout(arguments);
 
 		// Check if first argument is a batch file and process it if necessary
 		FILE *fp = fopen(arguments[1], "r");
