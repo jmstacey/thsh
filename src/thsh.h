@@ -36,7 +36,7 @@
  * Declare constants and globals.
  */
 // TODO: Determine appropriate buffer sizes
-int CHAR_BUFFER = 100; // Character input buffer size
+int CHAR_BUFFER = 255; // Character input buffer size
 int MAX_ARGS 	= 100; // Maximum number of arguments
 
 extern char **environ; 		  // Retrieve external environment.

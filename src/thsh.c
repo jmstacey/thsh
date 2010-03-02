@@ -19,7 +19,7 @@ void parse_input(char *input, char *arguments[])
 	int  index = 0;	   // Index counter
 
 	word = strtok(input, SEPARATOR);
-	while (word != NULL)
+	while (word != NULL && index < MAX_ARGS)
 	{
 		arguments[index] = word;
 		word = strtok(NULL, SEPARATOR);
@@ -184,7 +184,22 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "dir") == 0)
 		{
-			system("/bin/dir");
+			if (arguments[1] == NULL)
+			{
+				system("/bin/dir");
+			}
+			else
+			{
+				if (chdir(arguments[1]) != 0)
+				{
+					printf("dir: %s: %s\n", arguments[1], strerror(errno));
+				}
+				else
+				{
+					system("/bin/dir");
+					chdir(getenv("PWD"));
+				}
+			}
 		}
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
