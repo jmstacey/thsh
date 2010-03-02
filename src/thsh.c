@@ -19,7 +19,7 @@ void parse_input(char *input, char *arguments[])
 	int  index = 0;	   // Index counter
 
 	word = strtok(input, SEPARATOR);
-	while (word != NULL)
+	while (word != NULL && index < MAX_ARGS)
 	{
 		arguments[index] = word;
 		word = strtok(NULL, SEPARATOR);
