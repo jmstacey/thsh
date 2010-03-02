@@ -115,6 +115,14 @@ void run_external_program(char *cmd[]);
 void set_pwd();
 
 /**
+ * Handles the ctrl-c interrupt signal and prints a new line.
+ *
+ * @param int signo
+ * 	 Signal number.
+ */
+void handle_signal(int signo);
+
+/**
  * Main program entry point for thsh [this shell].
  *
  * @param int argc

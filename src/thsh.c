@@ -144,7 +144,7 @@ int main(int argc, char *argv[], char *envp[])
 	// Main run loop
 	while (1)
 	{
-		signal(SIGINT, handle_signal);
+		signal(SIGINT, handle_signal); // Register ctrl-c interrupt handler
 
 		print_prompt();
 
