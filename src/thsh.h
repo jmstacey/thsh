@@ -123,6 +123,20 @@ void set_pwd();
 void handle_signal(int signo);
 
 /**
+ * Performs operations specified by user in arguments.
+ *
+ * Internal commands and external programs are executed by this function
+ * according to what the user requested.
+ *
+ * @param char *arguments[]
+ * 	 Array of arguments
+ * @return int
+ *   Returns 1 to indicate we should quit. Otherwise, 0 [meaning not done]
+ *   is returned.
+ */
+int perform_operations(char *arguments[]);
+
+/**
  * Main program entry point for thsh [this shell].
  *
  * @param int argc

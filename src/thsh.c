@@ -11,8 +11,6 @@
 
 #include "thsh.h"
 
-// TODO: Protect from buffer overflows
-
 void parse_input(char *input, char *arguments[])
 {
 	char *word = NULL; // Word container
@@ -181,6 +179,87 @@ void override_stdout(char* cmdargs[])
 	{
 		freopen("/dev/tty", "a", stdout);
 	}
+
+int perform_operations(char *arguments[])
+{
+	// WARNING: Multiple return paths.
+	if (arguments[0] == NULL)
+	{
+		// strcmp() will crash and burn if arguments[0] is NULL
+		return 0;
+	}
+	else if (strcmp(arguments[0], "echo") == 0)
+	{
+		echo(arguments);
+	}
+	else if (strcmp(arguments[0], "environ") == 0)
+	{
+		print_environment_variables();
+	}
+	else if (strcmp(arguments[0], "quit") == 0)
+	{
+		return 1; // Quit our program
+	}
+	else if (strcmp(arguments[0], "clr") == 0)
+	{
+		system("clear");
+	}
+	else if (strcmp(arguments[0], "dir") == 0)
+	{
+		if (arguments[1] == NULL)
+		{
+			system("/bin/dir");
+		}
+		else
+		{
+			if (chdir(arguments[1]) != 0)
+			{
+				printf("dir: %s: %s\n", arguments[1], strerror(errno));
+			}
+			else
+			{
+				system("/bin/dir");
+				chdir(getenv("PWD"));
+			}
+		}
+	}
+	else if (strcmp(arguments[0], "cd") == 0)
+	{
+		if (arguments[1] == NULL)
+		{
+			printf("%s\n", getenv("PWD"));
+		}
+		else if (chdir(arguments[1]) != 0)
+		{
+			printf("cd: %s: %s\n", arguments[1], strerror(errno));
+		}
+		else
+		{
+			set_pwd();
+		}
+	}
+	else if (strcmp(arguments[0], "pause") == 0)
+	{
+		char input[CHAR_BUFFER];
+
+		printf("Shell operations have been paused. Press the <enter> key to resume.");
+		fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
+	}
+	else if (strcmp(arguments[0], "help") == 0)
+	{
+		char more_cmd[CHAR_BUFFER];
+		strcpy(more_cmd, "more ");
+		strcat(more_cmd, getenv("HOME"));
+		strcat(more_cmd, "/README");
+		system(more_cmd);
+	}
+	else
+	{
+		// Attempt to run existing system command
+		run_external_program(arguments);
+	}
+
+	return 0;
 }
 
 int main(int argc, char *argv[], char *envp[])
@@ -188,11 +267,11 @@ int main(int argc, char *argv[], char *envp[])
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
 	signal(SIGINT, SIG_IGN); 		  // Ignore ctrl-c. See http://www.cs.cf.ac.uk/Dave/C/node24.html
 
-
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
 	char *batch_script_arguments[MAX_ARGS];
 	char shell_path[BUFSIZ];
+	int  done = 0; // We are not done executing
 
 	// Initialize shell
 	set_pwd(); // Update the current working directory
@@ -200,7 +279,7 @@ int main(int argc, char *argv[], char *envp[])
 	setenv("SHELL", shell_path, 1);
 
 	// Main run loop
-	while (1)
+	while (done == 0)
 	{
 		signal(SIGINT, handle_signal); // Register ctrl-c interrupt handler
 
@@ -220,86 +299,15 @@ int main(int argc, char *argv[], char *envp[])
 				parse_input(line, batch_script_arguments);
 				if (batch_script_arguments[0] == NULL)
 				{
-					continue;
+					continue; // End of arguments
 				}
-				run_external_program(batch_script_arguments);
+				done = perform_operations(batch_script_arguments);
 			}
 			fclose(fp);
 		}
-
-		// Perform our operations
-		if (arguments[0] == NULL)
-		{
-			// strcmp() will crash and burn if arguments[0] is NULL
-			continue;
-		}
-		else if (strcmp(arguments[0], "echo") == 0)
-		{
-			echo(arguments);
-		}
-		else if (strcmp(arguments[0], "environ") == 0)
-		{
-			print_environment_variables();
-		}
-		else if (strcmp(arguments[0], "quit") == 0)
-		{
-			return EXIT_SUCCESS;
-		}
-		else if (strcmp(arguments[0], "clr") == 0)
-		{
-			system("clear");
-		}
-		else if (strcmp(arguments[0], "dir") == 0)
-		{
-			if (arguments[1] == NULL)
-			{
-				system("/bin/dir");
-			}
-			else
-			{
-				if (chdir(arguments[1]) != 0)
-				{
-					printf("dir: %s: %s\n", arguments[1], strerror(errno));
-				}
-				else
-				{
-					system("/bin/dir");
-					chdir(getenv("PWD"));
-				}
-			}
-		}
-		else if (strcmp(arguments[0], "cd") == 0)
-		{
-			if (arguments[1] == NULL)
-			{
-				printf("%s\n", getenv("PWD"));
-			}
-			else if (chdir(arguments[1]) != 0)
-			{
-				printf("cd: %s: %s\n", arguments[1], strerror(errno));
-			}
-			else
-			{
-				set_pwd();
-			}
-		}
-		else if (strcmp(arguments[0], "pause") == 0)
-		{
-			printf("Shell operations have been paused. Press the <enter> key to resume.");
-			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
-		}
-		else if (strcmp(arguments[0], "help") == 0)
-		{
-			char more_cmd[CHAR_BUFFER];
-			strcpy(more_cmd, "more ");
-			strcat(more_cmd, getenv("HOME"));
-			strcat(more_cmd, "/README");
-			system(more_cmd);
-		}
 		else
 		{
-			// Attempt to run existing system command
-			run_external_program(arguments);
+			done = perform_operations(arguments);
 		}
 	}
 
