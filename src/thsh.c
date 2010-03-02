@@ -184,7 +184,7 @@ int main(int argc, char *argv[], char *envp[])
 			{
 				if (chdir(arguments[1]) != 0)
 				{
-					printf("cd: %s: $s\n", arguments[1], strerror(errno));
+					printf("cd: %s: %s\n", arguments[1], strerror(errno));
 				}
 				else
 				{
