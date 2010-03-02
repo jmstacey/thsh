@@ -19,7 +19,7 @@ void parse_input(char *input, char *arguments[])
 	int  index = 0;	   // Index counter
 
 	word = strtok(input, SEPARATOR);
-	while (word != NULL)
+	while (word != NULL && index < MAX_ARGS)
 	{
 		arguments[index] = word;
 		word = strtok(NULL, SEPARATOR);
@@ -121,10 +121,16 @@ void set_pwd()
 	free(buf); // getcwd() mallocs buf
 }
 
+void handle_signal(int signo)
+{
+	printf("\n");
+}
+
 int main(int argc, char *argv[], char *envp[])
 {
 	setvbuf(stdout, NULL, _IONBF, 0); // Disable buffering. See http://homepages.tesco.net/J.deBoynePollard/FGA/capture-console-win32.html
 	signal(SIGINT, SIG_IGN); 		  // Ignore ctrl-c. See http://www.cs.cf.ac.uk/Dave/C/node24.html
+
 
 	char input[CHAR_BUFFER];
 	char *arguments[MAX_ARGS];
@@ -138,6 +144,8 @@ int main(int argc, char *argv[], char *envp[])
 	// Main run loop
 	while (1)
 	{
+		signal(SIGINT, handle_signal); // Register ctrl-c interrupt handler
+
 		print_prompt();
 
 		fgets(input, CHAR_BUFFER, stdin); // Get user input
@@ -179,7 +187,22 @@ int main(int argc, char *argv[], char *envp[])
 		}
 		else if (strcmp(arguments[0], "dir") == 0)
 		{
-			system("/bin/dir");
+			if (arguments[1] == NULL)
+			{
+				system("/bin/dir");
+			}
+			else
+			{
+				if (chdir(arguments[1]) != 0)
+				{
+					printf("dir: %s: %s\n", arguments[1], strerror(errno));
+				}
+				else
+				{
+					system("/bin/dir");
+					chdir(getenv("PWD"));
+				}
+			}
 		}
 		else if (strcmp(arguments[0], "cd") == 0)
 		{
@@ -200,6 +223,14 @@ int main(int argc, char *argv[], char *envp[])
 		{
 			printf("Shell operations have been paused. Press the <enter> key to resume.");
 			fgets(input, CHAR_BUFFER, stdin); // Wait for user to press enter
+		}
+		else if (strcmp(arguments[0], "help") == 0)
+		{
+			char more_cmd[CHAR_BUFFER];
+			strcpy(more_cmd, "more ");
+			strcat(more_cmd, getenv("HOME"));
+			strcat(more_cmd, "/README");
+			system(more_cmd);
 		}
 		else
 		{

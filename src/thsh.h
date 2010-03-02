@@ -36,7 +36,7 @@
  * Declare constants and globals.
  */
 // TODO: Determine appropriate buffer sizes
-int CHAR_BUFFER = 100; // Character input buffer size
+int CHAR_BUFFER = 255; // Character input buffer size
 int MAX_ARGS 	= 100; // Maximum number of arguments
 
 extern char **environ; 		  // Retrieve external environment.
@@ -113,6 +113,14 @@ void run_external_program(char *cmd[]);
  * The current working directory is obtained from the getcwd() system command.
  */
 void set_pwd();
+
+/**
+ * Handles the ctrl-c interrupt signal and prints a new line.
+ *
+ * @param int signo
+ * 	 Signal number.
+ */
+void handle_signal(int signo);
 
 /**
  * Main program entry point for thsh [this shell].
