@@ -144,11 +144,14 @@ int main(int argc, char *argv[], char *envp[])
 		parse_input(input, arguments);    // Parse the input
 
 		// Check if first argument is a batch file and process it if necessary
-		FILE *fp = fopen(arguments[0], "r");
-		if (fp)
+		FILE *fp = fopen(arguments[1], "r");
+		if (fp != NULL)
 		{
-			// TODO: Handle the batch file
-			// Possibly just read file line by line and execute self with that string of arguments
+			char line[CHAR_BUFFER];
+			while ( fgets ( line, CHAR_BUFFER, fp ) != NULL ) /* read a line */
+			{
+				printf("%s", line);
+			}
 			fclose(fp);
 		}
 
