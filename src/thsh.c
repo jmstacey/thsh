@@ -242,15 +242,16 @@ int main(int argc, char *argv[], char *envp[])
 				parse_input(line, batch_script_arguments);
 				if (batch_script_arguments[0] == NULL)
 				{
-					continue;
+					continue; // End of arguments
 				}
 				done = perform_operations(batch_script_arguments);
-				run_external_program(batch_script_arguments);
 			}
 			fclose(fp);
 		}
-
-		done = perform_operations(arguments);
+		else
+		{
+			done = perform_operations(arguments);
+		}
 	}
 
 	return EXIT_SUCCESS;
