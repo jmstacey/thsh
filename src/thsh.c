@@ -11,8 +11,6 @@
 
 #include "thsh.h"
 
-// TODO: Protect from buffer overflows
-
 void parse_input(char *input, char *arguments[])
 {
 	char *word = NULL; // Word container
