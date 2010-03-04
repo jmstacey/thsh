@@ -1,0 +1,86 @@
+Welcome to "The Shell" help file.
+
+Here is a list of some shell commands:
+
+cd <directory> - Change the current default director to <directory>.
+clr - Clears the screen.
+dir <directory> - List the contents of directory <directory>.
+environ - List all the environments strings.
+echo <comment> - Displays <comment> on the display.
+help - Displays the help file.
+pause - Pauses operation of the shell.
+quit - Quits the shell.
+<command> & - Will run command in the background.
+
+
+
+
+
+
+This shell supports i/o-redirection.
+For example,
+
+programname arg1 arg2 < inputfile > outputfile
+
+will execute programname with arguments arg1 and arg2.  It will then input inputfile and output outputfile.  If << or >> are used then the files will be appended rather than overwritten.
+
+
+
+
+CONCEPT OF I/O REDIRECTION
+
+1. Standard in, or STDIN.
+
+This is where input comes from, and it normally points at your terminal device.
+
+To find out what device is your terminal, use the tty(1) command. Note, the (1) after command names in UNIX refers to the section of the man pages that the documentation for the command exists in.
+
+You can arrange to run any command and pass it input from a file in the following way:
+
+$ some-command < /path/to/some/file
+
+Note, the '$' is your prompt. Note also, you can always specify a complete path name for a file.
+
+For example:
+
+$ grep -i Fred < /etc/passwd
+
+Would search for the string 'fred' in /etc/passwd, regardless of the case of the characters.
+
+But wait a minute, you object, I always use:
+
+$ grep -i Fred /etc/passwd
+
+This is true, but you can also pass the file in on STDIN, and you will get different results if you do. Can you see what the difference is?
+
+2. Standard out, or STDOUT.
+
+This is where the normal output from a program goes. It normally points at your terminal as well, but you can redirect it.
+
+You can redirect output in the following way:
+
+$ some-program > /path/to/some/file
+
+For example:
+
+$ grep -i Fred /etc/passwd > /tmp/results
+
+3. Standard error, or STDERR.
+
+This is where error output from your program goes. This normally points at your terminal as well, but you can redirect it.
+
+Why have different output places for standard out and standard error?
+
+Well, as you will see when you come to writing shell scripts, you often do not want error messages cluttering up the normal output from a program.
+
+Found at http://www.linuxsa.org.au/tips/io-redirection.html
+
+
+
+The program environment:
+
+Program developed in GNU/Linux using Ecplise with C99 library.
+
+
+
+
