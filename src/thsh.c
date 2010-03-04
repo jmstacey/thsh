@@ -247,6 +247,7 @@ int perform_operations(char *arguments[])
 	}
 	else if (strcmp(arguments[0], "help") == 0)
 	{
+		// Assume README is in home directory for simplicity
 		char more_cmd[CHAR_BUFFER];
 		strcpy(more_cmd, "more ");
 		strcat(more_cmd, getenv("HOME"));
